@@ -13,6 +13,14 @@ const io = require("socket.io")(server, {
 });
 const port = process.env.PORT || config.local_port;
 
+const load_lobby_events = require("./Events/LobbyEvents");
+
+
+
+
+
+
+
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
@@ -20,6 +28,61 @@ app.get('/', (req, res) => {
 // Listen for a "connection" event for incoming sockets.
 io.on("connection", (socket) => {
     console.log("User has connected");
+
+
+
+      // when the 6th player joins send a message out to all users that the 6th player has joined
+  // host should get the message
+  socket.on('lobby-ready', () => {
+    
+    load_lobby_events(io, socket, mafiaGame);
+    //SocketEvent.load_common_event(socket);
+
+
+
+
+
+    // let mafiaGame = MafiaGame.GetInstance(); // todo: implement to grab the game.(singleton?)
+    // let mafiaGameRoom = mafiaGame.gameRoomsDict[roomID];
+    // //let hostsocketID = mafiaGameRoom.hostsocketID;
+    // let hostsocketID = mafiaGameRoom[0]; //(host is first person)
+    // let mafiaGamePlayers = mafiaGameRoom.players;
+
+    // // message should show the confirmmation button only for the host.
+    // socket.broadcast.to(hostsocketID).emit('confirm-game-start',  null);
+    
+    // // to all other members tell them that game is ready
+    // // host is position 0, so skip.
+    // for (i = 1; i < mafiaGamePlayers.length; i++) {
+    //   let player = mafiaGamePlayers[i];
+
+    //   //if (player.socketID !== hostsocketID){
+    //     socket.broadcast.to(hostsocketID).emit('game-ready',  null);
+    //   //}
+    // }
+
+
+
+
+  });
+
+
+  // when the 6th player joins send a message out to all users that the 6th player has joined
+  socket.on('gameReady', () => {
+    socket.broadcast.emit('startstart',  "started game");
+     
+ 
+  });
+
+
+
+
+
+
+
+
+
+
 });
 
 // Start the server on our predetermined port number.
