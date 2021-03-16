@@ -28,13 +28,28 @@ describe('Domain Model tests', () => {
 
     test('room domain model 1 object', (done) => {
         const player1 = new Player('00001', 'room1', 'nickname1');
-
         const room = new Room();
-
         room.addPlayer(player1);
-
         if (room.players.length === 1) {
             done();
         }
     });
+
+    test('creation of new room in mafia game', (done) => {
+      const mafiaGame = new MafiaGame();
+      const roomID = mafiaGame.newGame();
+      expect(mafiaGame.gameRoomsDict[roomID]).toBeDefined();
+      done();
+      
+    });
+
+    test('creation of unique rooms', (done) => {
+      const mafiaGame = new MafiaGame();
+      const roomID = mafiaGame.newGame();
+      const roomID2 = mafiaGame.newGame();
+      expect(roomID).not.toBe(roomID2);
+      done();
+    });
+
+
 });
